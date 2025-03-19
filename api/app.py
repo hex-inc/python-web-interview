@@ -12,49 +12,56 @@ app = Flask(__name__)
 
 CORS(app)
 
-data_dir = Path(__file__).parent.parent / 'src' / 'api' / 'data'
+data_dir = Path(__file__).parent.parent / "src" / "api" / "data"
+
 
 # Example usage in app.py:
 def create_user_filter(user_id: int) -> Callable[[Project], bool]:
     """Creates a filter function for projects by user ID"""
     return lambda project: project.creatorId == user_id
 
+
 def load_json(filename):
-    with open(data_dir / filename, 'r') as f:
+    with open(data_dir / filename, "r") as f:
         return json.load(f)
 
-@app.route('/api/users', methods=['GET'])
-def get_users():
-    return jsonify(load_json('users.json'))
 
-@app.route('/api/projects', methods=['GET'])
+@app.route("/api/users", methods=["GET"])
+def get_users():
+    return jsonify(load_json("users.json"))
+
+
+@app.route("/api/projects", methods=["GET"])
 def get_projects():
-    projects = load_json('projects.json')
-    
+    projects = load_json("projects.json")
+
     # Handle pagination using startAfterId
     start_after = None
-    start_after_id = request.args.get('startAfterId')
+    start_after_id = request.args.get("startAfterId")
     if start_after_id:
         start_after_id = int(start_after_id)
-        start_idx = next((i for i, p in enumerate(projects) if p['id'] == start_after_id), -1)
+        start_idx = next(
+            (i for i, p in enumerate(projects) if p["id"] == start_after_id), -1
+        )
         if start_idx != -1:
             start_after = Project(**projects[start_idx])
 
     try:
-        page_size = int(request.args.get('pageSize', 10))
+        page_size = int(request.args.get("pageSize", 10))
     except ValueError:
         page_size = 10
 
     # Filter by userId if provided
-    user_id = request.args.get('userId')
+    user_id = request.args.get("userId")
     if user_id:
         user_id = int(user_id)
         page = get_page_filtered(page_size, create_user_filter(user_id), start_after)
     else:
         page = get_page(page_size, start_after)
-    
+
     return jsonify(page)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     sys.stdout.reconfigure(line_buffering=True)
     app.run(port=5000, debug=True)
