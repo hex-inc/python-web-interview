@@ -2,7 +2,6 @@ from typing import Callable
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from pagination import get_page, get_page_filtered
-from database import ProjectDatabase
 from models import Project
 import json
 from pathlib import Path

@@ -1,5 +1,4 @@
-from typing import List, Callable, Optional
-from dataclasses import dataclass
+from typing import Callable, Optional
 from database import ProjectDatabase
 from models import Project
 
