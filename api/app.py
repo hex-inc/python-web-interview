@@ -1,4 +1,3 @@
-import sys
 from typing import Callable
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -63,5 +62,4 @@ def get_projects():
 
 
 if __name__ == "__main__":
-    sys.stdout.reconfigure(line_buffering=True)
     app.run(port=5000, debug=True)
