@@ -16,12 +16,12 @@ def get_page(page_size: int, start_after: Optional[Project] = None):
         start_after: Optional item to start pagination after
 
     Returns:
-        Page object containing items and has_more_results flag
+        Page object containing items and hasMoreResults attributes
     """
     db = ProjectDatabase()
     return {
         "projects": db.get_items(page_size, start_after),
-        "has_more_results": False,  # TODO
+        "hasMoreResults": False,  # TODO
     }
 
 
@@ -43,6 +43,6 @@ def get_page_filtered(
         start_after: Optional item to start pagination after
 
     Returns:
-        Page object containing items and has_more_results flag
+        Page object containing items and hasMoreResults attributes
     """
     return get_page(page_size, start_after)
