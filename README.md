@@ -7,5 +7,5 @@ Welcome to the Hex Web Development Interview! During the interview session, you'
 ## Running the app
 
 1) Install JS dependencies with `npm install`.
-2) Install Python dependencies with `uv sync`.
+2) Install Python dependencies with `uv sync`. If `uv` is unavailable, first run `pip install uv`.
 3) Run `npm run start`. You should be able to view the app at [http://localhost:3000/](http://localhost:3000/). It will hot reload as you make changes.
