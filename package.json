@@ -27,7 +27,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "start-frontend": "react-scripts start",
-    "start-api": "uv run api/app.py"
+    "start-api": "PYTHONUNBUFFERED=1 uv run api/app.py"
   },
   "browserslist": [
     ">0.2%",
