@@ -2,6 +2,7 @@ from pathlib import Path
 import json
 from typing import List, Optional
 from models import Project
+from busy_loop_detector import BusyLoopDetector
 
 
 class ProjectDatabase:
@@ -11,6 +12,7 @@ class ProjectDatabase:
             raw_data = json.load(f)
             # Convert raw dictionaries to Project objects
             self._items = [Project(**item) for item in raw_data]
+        self._detector = BusyLoopDetector()
 
     def get_items(
         self, page_size: int = 10, start_after: Optional[Project] = None
@@ -26,6 +28,8 @@ class ProjectDatabase:
         Returns:
             List of Project objects for the requested page
         """
+        self._detector.check()
+
         if start_after is None:
             return self._items[:page_size]
 
