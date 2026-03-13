@@ -2,7 +2,7 @@
 
 ## Overview
 
-Welcome to the Hex Coding Interview! During the interview session, you'll implment two functions this repository to fix an application. All changes will be made to `api/pagination.py`.
+Welcome to the Hex Coding Interview! During the interview session, you'll implement two functions this repository to fix an application. All changes will be made to `api/pagination.py`.
 
 Before the session starts, please clone this repository and run `npm install` and `uv sync` in the root to install dependencies. You can also add any other dependencies that you think that you may want to use, but there is no need to write any code or do anything else ahead of time to prepare for the session.
 
