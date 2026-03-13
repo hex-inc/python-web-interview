@@ -2,10 +2,6 @@ from pathlib import Path
 import json
 from typing import List, Optional
 from models import Project
-from busy_loop_detector import BusyLoopDetector
-
-
-_detector = BusyLoopDetector()
 
 
 class ProjectDatabase:
@@ -30,8 +26,6 @@ class ProjectDatabase:
         Returns:
             List of Project objects for the requested page
         """
-        _detector.check()
-
         if start_after is None:
             return self._items[:page_size]
 
