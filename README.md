@@ -6,10 +6,6 @@ Welcome to the Hex Coding Interview! During the interview session, you'll implem
 
 Before the session starts, please clone this repository and run `npm install` and `uv sync` in the root to install dependencies. You can also add any other dependencies that you think that you may want to use, but there is no need to write any code or do anything else ahead of time to prepare for the session.
 
-## Interview
-
-During the interview session, you'll implement two functions in this repository to fix an application. All changes will be made to [`api/pagination.py`](api/pagination.py).
-
 ## Running the app
 
 1) Install JS dependencies with `npm install`.
