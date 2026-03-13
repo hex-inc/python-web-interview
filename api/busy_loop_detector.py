@@ -16,7 +16,7 @@ class BusyLoopDetector:
 
     def _reset_timer(self) -> None:
         self._start_time = time.monotonic()
-        self._counter = 0
+        self._counter = 1
 
     def check(self) -> None:
         self._counter += 1
