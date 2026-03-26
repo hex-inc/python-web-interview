@@ -18,13 +18,13 @@ class DefaultServer {
   }): Promise<ProjectsResponse> {
     const url = new URL('http://127.0.0.1:5000/api/projects');
 
-    if (options?.userId) {
+    if (options?.userId != null) {
       url.searchParams.append('userId', options.userId);
     }
-    if (options?.startAfter?.id) {
+    if (options?.startAfter?.id != null) {
       url.searchParams.append('startAfterId', options.startAfter.id.toString());
     }
-    if (options?.pageSize) {
+    if (options?.pageSize != null) {
       url.searchParams.append('pageSize', options.pageSize.toString());
     }
 
