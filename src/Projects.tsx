@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ProjectData, SERVER } from "./api";
+import { ProjectData, ProjectsRequestTimeoutError, SERVER } from "./api";
 
 export interface NameById {
   [key: number]: string;
@@ -22,7 +22,11 @@ export default function Projects({ selectedUser, nameById }: ProjectsProps) {
         setProjects(projects => [...(projects ?? []), ...page.projects]);
       }
       setHasMoreResults(page.hasMoreResults);
-    }).catch(() => {
+    }).catch((error) => {
+      if (error instanceof ProjectsRequestTimeoutError) {
+        alert(error.message);
+        return;
+      }
       alert("Something went wrong...");
     });
   }, [selectedUser]);

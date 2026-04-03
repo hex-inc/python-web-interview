@@ -3,7 +3,7 @@ import { render } from "react-dom";
 
 import App from "./App";
 import { PROJECTS, USERS } from "./api/data";
-import { ProjectData, ProjectsResponse, SERVER, UserData } from "./api";
+import { ProjectData, ProjectsRequestTimeoutError, ProjectsResponse, SERVER, UserData } from "./api";
 
 const rootElement = document.getElementById("root");
 render(<App />, rootElement);
@@ -16,18 +16,26 @@ render(<App />, rootElement);
     let hasMoreResults = true;
     let lastProject: ProjectData | undefined = undefined;
 
-    while (hasMoreResults) {
-      const page: ProjectsResponse = await SERVER.getProjects({ pageSize, startAfter: lastProject, userId: user?.id?.toString() });
-      if (page.hasMoreResults && page.projects.length < pageSize) {
-        console.log(
-          `❌ ${userString} // Improperly sized page - hasMoreResults: true but results.length < pageSize`
-        );
-        console.groupEnd();
+    try {
+      while (hasMoreResults) {
+        const page: ProjectsResponse = await SERVER.getProjects({ pageSize, startAfter: lastProject, userId: user?.id?.toString() });
+        if (page.hasMoreResults && page.projects.length < pageSize) {
+          console.log(
+            `❌ ${userString} // Improperly sized page - hasMoreResults: true but results.length < pageSize`
+          );
+          console.groupEnd();
+          return;
+        }
+        totalCountFromApi += page.projects.length;
+        hasMoreResults = page.hasMoreResults;
+        lastProject = page.projects[page.projects.length - 1];
+      }
+    } catch (error) {
+      if (error instanceof ProjectsRequestTimeoutError) {
+        console.log(`❌ ${userString} // ${error.message}`);
         return;
       }
-      totalCountFromApi += page.projects.length;
-      hasMoreResults = page.hasMoreResults;
-      lastProject = page.projects[page.projects.length - 1];
+      throw error;
     }
 
     const filterCallback = user ? (project: ProjectData) => project.creatorId === user.id : undefined;
@@ -39,5 +47,7 @@ render(<App />, rootElement);
       console.log(`✅ ${userString} // Counts match: ${totalCountFromApi}`);
     }
   }
-  Promise.all([...USERS.map(testUser), testUser()]);
+  Promise.all([...USERS.map(testUser), testUser()]).catch((error) => {
+    console.error(error);
+  });
 }
