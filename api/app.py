@@ -1,10 +1,19 @@
 from typing import Callable
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from pagination import get_page, get_page_filtered
 from models import Project
 import json
+import os
 from pathlib import Path
+
+# Wrap candidate-edited module imports so a syntax error doesn't kill the
+# Werkzeug reloader (its parent process exits when the child exits with a
+# non-restart code, and there is nothing to bring it back).
+try:
+    from pagination import get_page, get_page_filtered
+except Exception:
+    get_page = None  # type: ignore[assignment]
+    get_page_filtered = None  # type: ignore[assignment]
 
 app = Flask(__name__)
 
@@ -31,6 +40,9 @@ def get_users():
 
 @app.route("/api/projects", methods=["GET"])
 def get_projects():
+    if get_page is None:
+        return jsonify({"error": "pagination module failed to load — check the console for syntax errors"}), 500
+
     projects = load_json("projects.json")
 
     # Handle pagination using startAfterId
@@ -61,4 +73,9 @@ def get_projects():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get("API_PORT") or 5000)
+    # Watch all .py files in the api/ directory so the reloader picks up fixes
+    # to files that failed to import (and therefore aren't in sys.modules).
+    api_dir = Path(__file__).parent
+    extra = [str(p) for p in api_dir.glob("*.py")]
+    app.run(port=port, debug=True, extra_files=extra)
