@@ -4,6 +4,7 @@ from flask_cors import CORS
 from pagination import get_page, get_page_filtered
 from models import Project
 import json
+import os
 from pathlib import Path
 
 app = Flask(__name__)
@@ -61,4 +62,5 @@ def get_projects():
 
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    port = int(os.environ.get("API_PORT", 5000))
+    app.run(port=port, debug=True)
