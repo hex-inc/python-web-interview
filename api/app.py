@@ -73,7 +73,7 @@ def get_projects():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("API_PORT", 5000))
+    port = int(os.environ.get("API_PORT") or 5000)
     # Watch all .py files in the api/ directory so the reloader picks up fixes
     # to files that failed to import (and therefore aren't in sys.modules).
     api_dir = Path(__file__).parent
