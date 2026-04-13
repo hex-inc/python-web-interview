@@ -4,14 +4,17 @@ from flask_cors import CORS
 from models import Project
 import json
 import os
+import traceback
 from pathlib import Path
 
 # Wrap candidate-edited module imports so a syntax error doesn't kill the
 # Werkzeug reloader (its parent process exits when the child exits with a
 # non-restart code, and there is nothing to bring it back).
+_pagination_error: str | None = None
 try:
     from pagination import get_page, get_page_filtered
 except Exception:
+    _pagination_error = traceback.format_exc()
     get_page = None  # type: ignore[assignment]
     get_page_filtered = None  # type: ignore[assignment]
 
@@ -41,7 +44,7 @@ def get_users():
 @app.route("/api/projects", methods=["GET"])
 def get_projects():
     if get_page is None:
-        return jsonify({"error": "pagination module failed to load — check the console for syntax errors"}), 500
+        return jsonify({"error": f"pagination module failed to load:\n{_pagination_error}"}), 500
 
     projects = load_json("projects.json")
 

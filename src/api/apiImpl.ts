@@ -31,6 +31,10 @@ class DefaultServer {
     }
 
     const response = await fetch(url);
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      throw new Error(body?.error ?? `API error ${response.status}`);
+    }
     return response.json();
   }
 }
