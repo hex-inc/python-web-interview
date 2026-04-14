@@ -41,7 +41,7 @@ export default function Projects({ selectedUser, nameById }: ProjectsProps) {
   if (error) {
     return (
       <div className="error-overlay">
-        <h1>Compiled with problems:</h1>
+        <h1>Server error:</h1>
         <pre>{error}</pre>
       </div>
     );
