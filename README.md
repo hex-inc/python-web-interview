@@ -11,3 +11,8 @@ Before the session starts, please clone this repository and run `npm install` an
 1) Install JS dependencies with `npm install`.
 2) Install Python dependencies with `uv sync`. If `uv` is unavailable, first run `pip install uv`.
 3) Run `npm run start`. You should be able to view the app at [http://localhost:3000/](http://localhost:3000/). It will hot reload as you make changes.
+
+**A note on the API port**
+The API will attempt to run on port 5000.
+If 5000 is already in use, the next available port is used automatically (logged to the terminal on startup).
+You can pin the API_PORT if needed (rare): `API_PORT=5010 npm start`.

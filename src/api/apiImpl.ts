@@ -5,9 +5,11 @@ export interface ProjectsResponse {
   hasMoreResults: boolean;
 }
 
+const API_BASE = `http://127.0.0.1:${process.env.REACT_APP_API_PORT || "5000"}`;
+
 class DefaultServer {
   async getUsers(): Promise<UserData[]> {
-    const response = await fetch('http://127.0.0.1:5000/api/users');
+    const response = await fetch(`${API_BASE}/api/users`);
     return response.json();
   }
 
@@ -16,7 +18,7 @@ class DefaultServer {
     startAfter?: ProjectData;
     pageSize?: number;
   }): Promise<ProjectsResponse> {
-    const url = new URL('http://127.0.0.1:5000/api/projects');
+    const url = new URL(`${API_BASE}/api/projects`);
 
     if (options?.userId != null) {
       url.searchParams.append('userId', options.userId);
@@ -29,6 +31,10 @@ class DefaultServer {
     }
 
     const response = await fetch(url);
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      throw new Error(body?.error ?? `API error ${response.status}`);
+    }
     return response.json();
   }
 }

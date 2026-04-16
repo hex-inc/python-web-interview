@@ -45,3 +45,34 @@ body {
   gap: 10px;
   justify-content: space-between;
 }
+
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgb(35, 33, 32);
+  color: rgb(232, 232, 232);
+  padding: 2rem;
+  overflow: auto;
+  z-index: 9999;
+  font-family: sans-serif;
+}
+
+.error-overlay h1 {
+  color: rgb(252, 98, 93);
+  font-size: 1.4rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.error-overlay pre {
+  color: rgb(252, 98, 93);
+  background: rgba(206, 17, 38, 0.1);
+  padding: 1rem;
+  border-radius: 4px;
+  font-size: 13px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+}

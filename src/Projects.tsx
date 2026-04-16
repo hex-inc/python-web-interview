@@ -13,17 +13,19 @@ interface ProjectsProps {
 export default function Projects({ selectedUser, nameById }: ProjectsProps) {
   const [projects, setProjects] = React.useState<ProjectData[] | null>(() => null);
   const [hasMoreResults, setHasMoreResults] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   const fetchProjects = React.useCallback((startAfter?: ProjectData, overwrite = false) => {
     SERVER.getProjects({ pageSize: 5, startAfter, userId: selectedUser?.toString() }).then((page) => {
+      setError(null);
       if (overwrite) {
         setProjects(_ => ([...(page.projects ?? [])]));
       } else {
         setProjects(projects => [...(projects ?? []), ...page.projects]);
       }
       setHasMoreResults(page.hasMoreResults);
-    }).catch(() => {
-      alert("Something went wrong...");
+    }).catch((err) => {
+      setError(err.message);
     });
   }, [selectedUser]);
 
@@ -35,6 +37,15 @@ export default function Projects({ selectedUser, nameById }: ProjectsProps) {
   React.useEffect(() => {
     fetchProjects(undefined, true);
   }, [selectedUser, fetchProjects]);
+
+  if (error) {
+    return (
+      <div className="error-overlay">
+        <h1>Server error:</h1>
+        <pre>{error}</pre>
+      </div>
+    );
+  }
 
   return (
     <div className="projects">
