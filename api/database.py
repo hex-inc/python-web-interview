@@ -5,6 +5,11 @@ from models import Project
 
 
 class ProjectDatabase:
+    """YOU WILL NOT NEED TO EDIT THIS CODE.
+
+    This is strictly here to provide a simple mechanism to retrieve a list of
+    `pageSize` items, optionally starting after a given `startAfter`.
+    """
     def __init__(self):
         data_dir = Path(__file__).parent.parent / "src" / "api" / "data"
         with open(data_dir / "projects.json", "r") as f:
