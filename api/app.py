@@ -1,8 +1,8 @@
 from typing import Callable
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from data import PROJECTS, USERS
 from models import Project
-import json
 import os
 import traceback
 from pathlib import Path
@@ -22,23 +22,15 @@ app = Flask(__name__)
 
 CORS(app)
 
-data_dir = Path(__file__).parent.parent / "src" / "api" / "data"
-
-
 # Example usage in app.py:
 def create_user_filter(user_id: int) -> Callable[[Project], bool]:
     """Creates a filter function for projects by user ID"""
     return lambda project: project.creatorId == user_id
 
 
-def load_json(filename):
-    with open(data_dir / filename, "r") as f:
-        return json.load(f)
-
-
 @app.route("/api/users", methods=["GET"])
 def get_users():
-    return jsonify(load_json("users.json"))
+    return jsonify(USERS)
 
 
 @app.route("/api/projects", methods=["GET"])
@@ -46,7 +38,7 @@ def get_projects():
     if get_page is None:
         return jsonify({"error": f"pagination module failed to load:\n{_pagination_error}"}), 500
 
-    projects = load_json("projects.json")
+    projects = PROJECTS
 
     # Handle pagination using startAfterId
     start_after = None

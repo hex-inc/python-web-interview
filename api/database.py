@@ -1,6 +1,5 @@
-from pathlib import Path
-import json
 from typing import List, Optional
+from data import PROJECTS
 from models import Project
 
 
@@ -11,11 +10,7 @@ class ProjectDatabase:
     `pageSize` items, optionally starting after a given `startAfter`.
     """
     def __init__(self):
-        data_dir = Path(__file__).parent.parent / "src" / "api" / "data"
-        with open(data_dir / "projects.json", "r") as f:
-            raw_data = json.load(f)
-            # Convert raw dictionaries to Project objects
-            self._items = [Project(**item) for item in raw_data]
+        self._items = [Project(**item) for item in PROJECTS]
 
     def get_items(
         self, page_size: int = 10, start_after: Optional[Project] = None
